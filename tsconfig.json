@@ -26,6 +26,18 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "basehub": [
+        "./src/shims/basehub.ts"
+      ],
+      "basehub/*": [
+        "./src/shims/basehub.ts"
+      ],
+      "@/../basehub-types": [
+        "./src/shims/basehub-types.ts"
+      ],
+      "@/lib/basehub/fragments": [
+        "./src/shims/basehub-fragments.ts"
       ]
     }
   },
