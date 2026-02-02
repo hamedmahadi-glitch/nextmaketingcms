@@ -47,8 +47,14 @@ export async function getItems<T extends Record<string, any>>(
     const query = readItems(collection as never, queryParams as never);
     const result = await (directus as any).request(query);
     return result as T[];
-  } catch (error) {
-    console.error(`Error fetching items from ${collection}:`, error);
+  } catch (error: any) {
+    const errorMessage = error?.message || JSON.stringify(error);
+    const errorDetails = error?.errors?.[0]?.message || error?.statusText || 'Unknown error';
+    console.error(`Error fetching items from ${collection}: ${errorDetails}`, {
+      message: errorMessage,
+      status: error?.status || error?.response?.status,
+      url: error?.url || error?.response?.url,
+    });
     throw error;
   }
 }
@@ -70,8 +76,14 @@ export async function getItem<T extends Record<string, any>>(
 
     const result = await (directus as any).request(query);
     return result as T;
-  } catch (error) {
-    console.error(`Error fetching item from ${collection}:`, error);
+  } catch (error: any) {
+    const errorMessage = error?.message || JSON.stringify(error);
+    const errorDetails = error?.errors?.[0]?.message || error?.statusText || 'Unknown error';
+    console.error(`Error fetching item from ${collection}:`, {
+      message: errorMessage,
+      details: errorDetails,
+      status: error?.status || error?.response?.status,
+    });
     throw error;
   }
 }
@@ -164,8 +176,9 @@ export async function getSiteSettings() {
     });
 
     return settings[0] || null;
-  } catch (error) {
-    console.warn("Settings collection not found, returning null");
+  } catch (error: any) {
+    const errorDetails = error?.errors?.[0]?.message || error?.statusText || error?.message || 'Unknown error';
+    console.warn(`Failed to fetch settings: ${errorDetails}. Returning null as fallback.`);
     return null;
   }
 }
