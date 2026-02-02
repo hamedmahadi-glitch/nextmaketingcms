@@ -49,13 +49,10 @@ export const generateMetadata = async ({
     const page = await getPageBySlug(pathname);
     const settings = await getSiteSettings();
 
-    if (!page) {
-      return notFound();
-    }
-
+    // Return metadata even if page is null (fallback to settings)
     return {
-      title: page.meta_title || page.title || (settings?.site_name || ""),
-      description: page.meta_description || page.description || "",
+      title: page?.meta_title || page?.title || (settings?.site_name || ""),
+      description: page?.meta_description || page?.description || "",
     };
   } catch (error) {
     console.error("Error generating metadata:", error);
@@ -123,8 +120,17 @@ export default async function DynamicPage({
   try {
     const page = await getPageBySlug(pathname);
 
+    // If no page data (due to Directus auth error or not found),
+    // render an empty page instead of 404
     if (!page) {
-      notFound();
+      return (
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold mb-2">Page Not Found</h1>
+            <p className="text-gray-600">The page you're looking for doesn't exist or couldn't be loaded.</p>
+          </div>
+        </div>
+      );
     }
 
     const sections = Array.isArray(page.sections) ? page.sections : [];
@@ -144,6 +150,14 @@ export default async function DynamicPage({
     );
   } catch (error) {
     console.error("Error loading page:", error);
-    notFound();
+    // Render a basic error page instead of throwing
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-2">Error Loading Page</h1>
+          <p className="text-gray-600">An error occurred while loading the page. Please try again later.</p>
+        </div>
+      </div>
+    );
   }
 }

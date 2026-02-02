@@ -50,12 +50,16 @@ export async function getItems<T extends Record<string, any>>(
   } catch (error: any) {
     const errorMessage = error?.message || JSON.stringify(error);
     const errorDetails = error?.errors?.[0]?.message || error?.statusText || 'Unknown error';
-    console.error(`Error fetching items from ${collection}: ${errorDetails}`, {
+    const status = error?.status || error?.response?.status;
+    
+    console.warn(`Failed to fetch items from ${collection}: ${errorDetails} (${status}). Returning empty array.`, {
       message: errorMessage,
-      status: error?.status || error?.response?.status,
+      status,
       url: error?.url || error?.response?.url,
     });
-    throw error;
+    
+    // Return empty array as fallback instead of throwing
+    return [] as T[];
   }
 }
 
@@ -79,12 +83,15 @@ export async function getItem<T extends Record<string, any>>(
   } catch (error: any) {
     const errorMessage = error?.message || JSON.stringify(error);
     const errorDetails = error?.errors?.[0]?.message || error?.statusText || 'Unknown error';
-    console.error(`Error fetching item from ${collection}:`, {
+    const status = error?.status || error?.response?.status;
+    
+    console.warn(`Failed to fetch item from ${collection}: ${errorDetails} (${status}). Returning null.`, {
       message: errorMessage,
-      details: errorDetails,
-      status: error?.status || error?.response?.status,
+      status,
     });
-    throw error;
+    
+    // Return null as fallback instead of throwing
+    return null as any;
   }
 }
 
@@ -177,6 +184,7 @@ export async function getSiteSettings() {
 
     return settings[0] || null;
   } catch (error: any) {
+    // This shouldn't throw anymore since getItems returns empty array on error
     const errorDetails = error?.errors?.[0]?.message || error?.statusText || error?.message || 'Unknown error';
     console.warn(`Failed to fetch settings: ${errorDetails}. Returning null as fallback.`);
     return null;
