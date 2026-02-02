@@ -15,17 +15,32 @@ export async function getItems<T extends Record<string, any>>(
   }
 ) {
   try {
-    const queryParams: any = {
-      fields: options?.fields || ["*"],
-      limit: options?.limit || 100,
-      offset: options?.offset || 0,
-    };
-
-    if (options?.sort) {
+    const queryParams: any = {};
+    
+    // Only add defined properties
+    if (options?.fields) {
+      queryParams.fields = options.fields;
+    } else {
+      queryParams.fields = ["*"];
+    }
+    
+    if (typeof options?.limit === "number") {
+      queryParams.limit = options.limit;
+    } else {
+      queryParams.limit = 100;
+    }
+    
+    if (typeof options?.offset === "number") {
+      queryParams.offset = options.offset;
+    } else {
+      queryParams.offset = 0;
+    }
+    
+    if (options?.sort && Array.isArray(options.sort) && options.sort.length > 0) {
       queryParams.sort = options.sort;
     }
 
-    if (options?.filter) {
+    if (options?.filter && Object.keys(options.filter).length > 0) {
       queryParams.filter = options.filter;
     }
 
