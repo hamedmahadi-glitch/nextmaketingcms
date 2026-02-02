@@ -19,11 +19,13 @@ export function Pump({ children, queries }: any) {
   return null;
 }
 
-// Stub RichText
-export function RichText({ content }: any) {
-  return <div dangerouslySetInnerHTML={{ __html: content }} />;
-}
+// Stub RichText - exporté comme const
+export const RichText = ({ content, children, components }: any) => {
+  return children || content;
+};
 
 export type RichTextProps = {
-  content: string;
+  content?: string;
+  children?: React.ReactNode;
+  components?: Record<string, any>;
 };

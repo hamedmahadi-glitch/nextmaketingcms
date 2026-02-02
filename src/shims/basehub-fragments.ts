@@ -48,3 +48,25 @@ export const optimizedImageFragment = {
   width: true,
   height: true,
 };
+
+export const quoteFragment = {
+  __typename: "Quote",
+  content: true,
+  author: true,
+  company: true,
+};
+
+export const testimonialFragment = {
+  __typename: "Testimonial",
+  _id: true,
+  _title: true,
+  content: true,
+  author: authorFragment,
+  avatar: avatarFragment,
+};
+
+export const richTextFragment = {
+  __typename: "RichText",
+  json: true,
+  html: true,
+};
