@@ -7,15 +7,7 @@ export { Image as BaseHubImage } from "next/image";
 export { Pump } from "./basehub-react-pump";
 export { RichText, type RichTextProps } from "./basehub-react-rich-text";
 export { sendEvent, parseFormData } from "./basehub-events";
-
-// Stub fragmentOn pour éviter les erreurs
-export function fragmentOn(typename: string, fields: any) {
-  return { __typename: typename, ...fields };
-}
-
-// Stub pour basehub() query function
-export function basehub(options?: any) {
-  return {
+export { useSearch, SearchBox, type Hit } from "./basehub-react-search";
     query: (q: any) => Promise.resolve({}),
   };
 }
