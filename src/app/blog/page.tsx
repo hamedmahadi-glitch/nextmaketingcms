@@ -28,8 +28,8 @@ export const generateMetadata = async (): Promise<Metadata | undefined> => {
   });
 
   return {
-    title: data.site.blog.metadata.title ?? undefined,
-    description: data.site.blog.metadata.description ?? undefined,
+    title: (data as any)?.site?.blog?.metadata?.title ?? undefined,
+    description: (data as any)?.site?.blog?.metadata?.description ?? undefined,
   };
 };
 

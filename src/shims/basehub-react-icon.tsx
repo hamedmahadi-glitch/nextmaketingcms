@@ -1,5 +1,5 @@
 "use client";
-// Stub for basehub/react-icon - Icon component compatibility shim
+
 import { ReactNode } from "react";
 
 export interface IconProps {
@@ -10,7 +10,6 @@ export interface IconProps {
   [key: string]: any;
 }
 
-// Icon component stub - renders a simple div or span with icon styling
 export function Icon({
   name,
   size = 24,

@@ -35,13 +35,13 @@ export function BaseHubThemeProvider() {
         const grayScale = colors[data.site.settings.theme.grayScale];
 
         const css = Object.entries(accent).map(([key, value]) => {
-          const rgb = anyColorToRgb(value);
+          const rgb = anyColorToRgb(value as string);
 
           return `--accent-${key}: ${value}; --accent-rgb-${key}: ${rgb.r}, ${rgb.g}, ${rgb.b};`;
         });
 
         Object.entries(grayScale).forEach(([key, value]) => {
-          const rgb = anyColorToRgb(value);
+          const rgb = anyColorToRgb(value as string);
 
           css.push(
             `--grayscale-${key}: ${value}; --grayscale-rgb-${key}: ${rgb.r}, ${rgb.g}, ${rgb.b};`,

@@ -27,7 +27,7 @@ export const generateMetadata = async (): Promise<Metadata | undefined> => {
 };
 
 export default async function BlogPage() {
-  let posts = [];
+  let posts: any[] = [];
 
   try {
     posts = await getBlogPosts();
@@ -42,7 +42,7 @@ export default async function BlogPage() {
         <Heading level={1} className="text-center">
           Blog
         </Heading>
-        <Search />
+        <Search _searchKey="" />
       </Section>
 
       <Section className="py-10">

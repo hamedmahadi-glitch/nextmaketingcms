@@ -150,7 +150,7 @@ function CategoryHeader({
           <p className="text-lg font-medium">{category._title}</p>
         </TableCell>
       </th>
-      {Array.from(category.features.items[0]?.values.items ?? []).map((_) => (
+      {Array.from(category.features.items[0]?.values.items ?? []).map((_ :any) => (
         <th key={`${category._title}${_._id}`} className="w-[1fr]" />
       ))}
     </tr>

@@ -19,21 +19,23 @@ const $headingContainer = cva("flex flex-col gap-3", {
 type HeadingProps = {
   children: React.ReactNode;
   tag?: React.ReactNode;
+  level?: number; // Alias for tag
   subtitle?: React.ReactNode;
   className?: string;
   title?: string;
   align?: string | null;
 } & VariantProps<typeof $headingContainer>;
 
-export function Heading({ tag, subtitle, className, align = "center", ...props }: HeadingProps) {
+export function Heading({ tag, level, subtitle, className, align = "center", ...props }: HeadingProps) {
+  const finalTag = tag || level;
   align = align ?? "center";
-  const Comp = Slot;
+  const Comp: any = Slot;
 
   if (align === "none") return null;
 
   return (
     <div className={$headingContainer({ align, className })}>
-      {tag ? <Tag>{tag}</Tag> : null}
+      {finalTag && <Comp asChild={true}>{finalTag}</Comp>}
       <div
         className={clsx("flex max-w-[800px] flex-col justify-center gap-1", {
           "items-start self-start": align === "left",

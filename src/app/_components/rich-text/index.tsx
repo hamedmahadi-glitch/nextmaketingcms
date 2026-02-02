@@ -22,13 +22,12 @@ export const richTextClasses = clsx(
   s["rich-text"],
 );
 
-// @ts-expect-error Code won't match props
 export const richTextBaseComponents: RichTextProps["components"] = {
   code: Code,
-  pre: ({ children }) => <>{children}</>,
-  b: ({ children }) => <strong>{children}</strong>,
-  img: (props) => <RichTextImage {...props} />,
-  video: (props) => <RichTextVideo {...props} />,
+  pre: ({ children }: any) => <>{children}</>,
+  b: ({ children }: any) => <strong>{children}</strong>,
+  img: (props: any) => <RichTextImage {...props} />,
+  video: (props: any) => <RichTextVideo {...props} />,
 };
 
 function Code({

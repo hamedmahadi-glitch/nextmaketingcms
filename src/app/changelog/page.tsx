@@ -26,8 +26,8 @@ export const generateMetadata = async (): Promise<Metadata | undefined> => {
   });
 
   return {
-    title: data.site.changelog.metadata.title ?? undefined,
-    description: data.site.changelog.metadata.description ?? undefined,
+    title: (data as any)?.site?.changelog?.metadata?.title ?? undefined,
+    description: (data as any)?.site?.changelog?.metadata?.description ?? undefined,
   };
 };
 

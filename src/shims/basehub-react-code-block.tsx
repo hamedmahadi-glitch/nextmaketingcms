@@ -1,32 +1,38 @@
-// Stub for basehub/react-code-block - Code block component compatibility shim
+"use client";
+
 import { ReactNode } from "react";
 
 export type Language = string;
 
 export interface CodeBlockProps {
-  code: string;
+  code?: string;
   language?: Language;
   className?: string;
   theme?: any;
   children?: ReactNode;
+  childrenTop?: ReactNode;
+  lineNumbers?: any;
+  snippets?: any[];
+  components?: any;
   [key: string]: any;
 }
 
-// CodeBlock component stub
 export function CodeBlock({
   code,
   language = "javascript",
   className,
+  children,
+  childrenTop,
   ...props
 }: CodeBlockProps) {
   return (
     <pre className={className} {...props}>
-      <code>{code}</code>
+      {childrenTop}
+      <code>{code || children}</code>
     </pre>
   );
 }
 
-// createCssVariablesTheme stub
 export function createCssVariablesTheme(config?: any) {
   return {
     name: "default",

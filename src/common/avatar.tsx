@@ -18,7 +18,7 @@ export function Author({
         alt={image.alt ?? `Avatar for ${_title}`}
         className="size-8 rounded-full border-2 border-surface-primary object-cover transition-all dark:border-dark-surface-primary"
         height={image.height}
-        src={image.url}
+        src={image.url ?? ""}
         width={image.width}
         {...props}
       />
@@ -41,7 +41,7 @@ export function Avatar({
         className,
       )}
       height={28}
-      src={url}
+      src={url ?? ""}
       width={28}
       {...props}
     />

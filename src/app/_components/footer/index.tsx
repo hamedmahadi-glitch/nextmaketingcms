@@ -73,7 +73,7 @@ export async function Footer() {
                 <DarkLightImageAutoscale priority {...settings.logo} />
               </Link>
               <nav className="col-start-1 row-start-2 flex flex-col gap-x-2 gap-y-3 self-center sm:col-span-1 sm:col-start-2 sm:row-start-1 sm:flex-row sm:items-center sm:place-self-center md:gap-x-4 lg:gap-x-8">
-                {footer.navbar.items.map(({ _title, url }) => (
+                {footer.navbar.items.map(({ _title, url }: any) => (
                   <ButtonLink
                     key={_title}
                     unstyled
@@ -97,7 +97,7 @@ export async function Footer() {
               </p>
 
               <ul className="col-span-2 col-start-1 row-start-3 flex w-full items-center gap-x-3.5 gap-y-4 sm:col-span-1 sm:col-start-3 sm:row-start-2 sm:w-auto sm:flex-wrap sm:justify-self-end">
-                {footer.socialLinks.map((link) => {
+                {footer.socialLinks.map((link: any) => {
                   return (
                     <li key={link._title} className="shrink-0 sm:first:ml-auto">
                       <ButtonLink

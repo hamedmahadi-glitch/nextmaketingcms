@@ -61,13 +61,15 @@ export const generateMetadata = async (): Promise<Metadata> => {
     },
   });
 
-  const images = [{ url: data.site.settings.metadata.ogImage.url }];
+  const meta = (data as any)?.site?.settings?.metadata ?? {};
+
+  const images = [{ url: meta.ogImage?.url ?? "" }];
 
   let xAccount: string | undefined = undefined;
 
-  if (data.site.settings.metadata.xAccount) {
+  if (meta.xAccount?.url) {
     try {
-      const xUrl = new URL(data.site.settings.metadata.xAccount.url);
+      const xUrl = new URL(meta.xAccount.url);
       const split = xUrl.pathname.split("/");
 
       xAccount = split[split.length - 1];
@@ -78,23 +80,23 @@ export const generateMetadata = async (): Promise<Metadata> => {
 
   return {
     title: {
-      default: data.site.settings.metadata.defaultTitle,
-      template: data.site.settings.metadata.titleTemplate,
+      default: meta.defaultTitle,
+      template: meta.titleTemplate,
     },
-    applicationName: data.site.settings.metadata.sitename,
-    description: data.site.settings.metadata.defaultDescription,
+    applicationName: meta.sitename,
+    description: meta.defaultDescription,
     icons: [
       {
-        url: data.site.settings.metadata.favicon.url,
+        url: meta.favicon?.url,
         rel: "icon",
-        type: data.site.settings.metadata.favicon.mimeType,
+        type: meta.favicon?.mimeType,
       },
     ],
-    openGraph: { type: "website", images, siteName: data.site.settings.metadata.sitename },
+    openGraph: { type: "website", images, siteName: meta.sitename },
     twitter: {
       card: "summary_large_image",
       images,
-      site: data.site.settings.metadata.sitename,
+      site: meta.sitename,
       creator: xAccount,
     },
   };

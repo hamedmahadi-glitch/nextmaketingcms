@@ -49,7 +49,6 @@ export function Form(props: Form) {
             }
             await sendEvent(
               props.submissions.ingestKey,
-              // @ts-expect-error -- basehub events are typed based on the schema, but this Form component should be generic
               parsedData.data,
             );
           }}

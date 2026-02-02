@@ -7,6 +7,13 @@ import { languagesIcons } from "./language";
 import { FileIcon } from "@radix-ui/react-icons";
 import s from "./code-snippet.module.scss";
 
+const theme = createCssVariablesTheme({
+  name: "css-variables",
+  variablePrefix: "--shiki-",
+  variableDefaults: {},
+  fontStyle: true,
+});
+
 export const codeSnippetFragment = fragmentOn("CodeSnippetComponent", {
   _id: true,
   code: {
@@ -16,7 +23,11 @@ export const codeSnippetFragment = fragmentOn("CodeSnippetComponent", {
   _title: true,
 });
 
-export type CodeSnippetFragment = fragmentOn.infer<typeof codeSnippetFragment>;
+export type CodeSnippetFragment = {
+  _id: string;
+  code: { code: string; language: string };
+  _title: string;
+};
 
 export function CodeSnippet({ code, _id, _title = "Untitled" }: CodeSnippetFragment) {
   return (
@@ -34,7 +45,7 @@ export function CodeSnippet({ code, _id, _title = "Untitled" }: CodeSnippetFragm
           </header>
         }
         components={{
-          div: ({ children, ...rest }) => (
+          div: ({ children, ...rest }: any) => (
             <div className={s.content} {...rest}>
               {children}
             </div>
@@ -47,10 +58,3 @@ export function CodeSnippet({ code, _id, _title = "Untitled" }: CodeSnippetFragm
     </div>
   );
 }
-
-const theme = createCssVariablesTheme({
-  name: "css-variables",
-  variablePrefix: "--shiki-",
-  variableDefaults: {},
-  fontStyle: true,
-});

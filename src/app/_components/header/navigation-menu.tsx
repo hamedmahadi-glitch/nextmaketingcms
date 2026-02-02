@@ -113,7 +113,7 @@ function NavigationMenuLinkWithMenu({ _title, href, sublinks }: HeaderLiksFragme
       <NavigationMenuContent className="border-border bg-surface-primary dark:border-dark-border dark:bg-dark-surface-primary absolute top-[calc(100%+4px)] w-[clamp(180px,30vw,300px)] rounded-md border p-0.5">
         <div className="flex flex-col gap-1">
           <ul className="flex flex-col">
-            {sublinks.items.map((sublink) => {
+            {sublinks.items.map((sublink: any) => {
               const { href, _title } =
                 sublink.link.__typename === "PageReferenceComponent"
                   ? {
@@ -151,7 +151,7 @@ export function DesktopMenu({ navbar, rightCtas }: HeaderFragment) {
     <>
       <NavigationMenuHeader className="hidden lg:flex" links={navbar.items} />
       <div className="hidden items-center gap-2 justify-self-end lg:flex">
-        {rightCtas.items.map((cta) => {
+        {rightCtas.items.map((cta: any) => {
           return (
             <ButtonLink key={cta._id} className="px-3.5!" href={cta.href} intent={cta.type}>
               {cta.label}
@@ -185,7 +185,7 @@ export function MobileMenu({ navbar, rightCtas }: HeaderFragment) {
           <div className="bg-surface-primary dark:bg-dark-surface-primary fixed top-[calc(var(--header-height)+1px)] left-0 z-10 h-auto w-full">
             <div className="flex flex-col gap-8 px-6 py-8">
               <nav className="flex flex-col gap-4">
-                {navbar.items.map((link) =>
+                {navbar.items.map((link: any) =>
                   link.sublinks.items.length > 0 ? (
                     <ItemWithSublinks
                       key={link._id}
@@ -207,7 +207,7 @@ export function MobileMenu({ navbar, rightCtas }: HeaderFragment) {
                 )}
               </nav>
               <div className="flex items-center justify-start gap-2">
-                {rightCtas.items.map((cta) => {
+                {rightCtas.items.map((cta: any) => {
                   return (
                     <ButtonLink key={cta._id} href={cta.href} intent={cta.type} size="lg">
                       {cta.label}
@@ -281,7 +281,7 @@ function ItemWithSublinks({
           "flex h-0 origin-top transform-gpu flex-col gap-2 overflow-hidden pl-4 transition-transform",
         )}
       >
-        {sublinks.map((sublink) => {
+        {sublinks.map((sublink: any) => {
           const { href, _title } =
             sublink.link.__typename === "PageReferenceComponent"
               ? {

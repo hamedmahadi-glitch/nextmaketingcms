@@ -3,7 +3,9 @@
  * Réexporte tous les shims et fournit les exports de base
  */
 
-export { Image as BaseHubImage } from "next/image";
+import Image from "next/image";
+
+export { Image as BaseHubImage };
 export { Pump } from "./basehub-react-pump";
 export { RichText, type RichTextProps } from "./basehub-react-rich-text";
 export { sendEvent, parseFormData } from "./basehub-events";

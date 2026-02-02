@@ -9,6 +9,7 @@
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
+    "noImplicitAny": false,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
@@ -34,10 +35,10 @@
         "./src/shims/basehub-events.ts"
       ],
       "basehub/react-pump": [
-        "./src/shims/basehub-react-pump.ts"
+        "./src/shims/basehub-react-pump.tsx"
       ],
       "basehub/react-rich-text": [
-        "./src/shims/basehub-react-rich-text.ts"
+        "./src/shims/basehub-react-rich-text.tsx"
       ],
       "basehub/next-image": [
         "./src/shims/basehub-next-image.ts"
@@ -49,16 +50,16 @@
         "./src/shims/basehub-fragments.ts"
       ],
       "basehub/react-search": [
-        "./src/shims/basehub-react-search.ts"
+        "./src/shims/basehub-react-search.tsx"
       ],
       "basehub/react-icon": [
-        "./src/shims/basehub-react-icon.ts"
+        "./src/shims/basehub-react-icon.tsx"
       ],
       "basehub/next-toolbar": [
-        "./src/shims/basehub-next-toolbar.ts"
+        "./src/shims/basehub-next-toolbar.tsx"
       ],
       "basehub/react-code-block": [
-        "./src/shims/basehub-react-code-block.ts"
+        "./src/shims/basehub-react-code-block.tsx"
       ],
       "basehub/react-code-block/client": [
         "./src/shims/basehub-react-code-block-client.ts"

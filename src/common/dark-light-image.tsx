@@ -26,7 +26,7 @@ export function DarkLightImage({
           alt={dark.alt ?? alt ?? ""}
           className={clsx("hidden dark:block", className)}
           height={height ?? dark.height}
-          src={dark.url}
+          src={dark.url ?? ""}
           width={width ?? dark.width}
           {...props}
           {...(withPlaceholder && dark.blurDataURL
@@ -41,7 +41,7 @@ export function DarkLightImage({
         alt={light.alt ?? alt ?? ""}
         className={clsx(dark && "dark:hidden", className)}
         height={height ?? light.height}
-        src={light.url}
+        src={light.url ?? ""}
         width={width ?? light.width}
         {...props}
         {...(withPlaceholder && light.blurDataURL
@@ -56,8 +56,9 @@ export function DarkLightImage({
 }
 
 export function DarkLightImageAutoscale(props: DarkLightImageProps) {
-  const [aspectRatioWidth, aspectRatioHeight] = props.light.aspectRatio.split("/").map(Number);
-  const aspectRatio = (aspectRatioWidth ?? 0) / (aspectRatioHeight ?? 0);
+  const ar = props.light?.aspectRatio ?? "1/1";
+  const [aspectRatioWidth, aspectRatioHeight] = String(ar).split("/").map(Number);
+  const aspectRatio = (aspectRatioWidth ?? 0) / (aspectRatioHeight ?? 1);
   let logoStyle;
 
   switch (true) {

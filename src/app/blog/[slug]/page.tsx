@@ -38,7 +38,9 @@ export const generateStaticParams = async () => {
     },
   });
 
-  return data.site.blog.posts.items.map((post) => {
+  const items = (data as any)?.site?.blog?.posts?.items || [];
+
+  return items.map((post: any) => {
     return {
       slug: post._slug,
     };
@@ -78,10 +80,10 @@ export const generateMetadata = async ({
     },
   });
 
-  const post = data.site.blog.posts.items[0];
+  const post = (data as any)?.site?.blog?.posts?.items?.[0];
 
   if (!post) return undefined;
-  const images = [{ url: post.ogImage.url }];
+  const images = [{ url: post.ogImage?.url }];
 
   return {
     title: post._title,
@@ -93,7 +95,7 @@ export const generateMetadata = async ({
     twitter: {
       images,
       card: "summary_large_image",
-      site: data.site.settings.metadata.sitename,
+      site: (data as any)?.site?.settings?.metadata?.sitename,
     },
   };
 };

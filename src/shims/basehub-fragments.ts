@@ -39,6 +39,11 @@ export const authorFragment = {
   _id: true,
   _title: true,
   image: avatarFragment,
+  role: true,
+  company: {
+    _title: true,
+    image: avatarFragment,
+  },
 };
 
 export const optimizedImageFragment = {
@@ -51,9 +56,9 @@ export const optimizedImageFragment = {
 
 export const quoteFragment = {
   __typename: "Quote",
-  content: true,
-  author: true,
-  company: true,
+  _id: true,
+  quote: true,
+  author: authorFragment,
 };
 
 export const testimonialFragment = {
@@ -69,4 +74,66 @@ export const richTextFragment = {
   __typename: "RichText",
   json: true,
   html: true,
+};
+// Type exports for compatibility (realistic shapes used by components)
+export type AvatarFragment = {
+  url?: string;
+  alt?: string;
+  width?: number;
+  height?: number;
+};
+
+export type CompanyFragment = {
+  _title?: string;
+  image?: AvatarFragment;
+};
+
+export type AuthorFragment = {
+  _id?: string | number;
+  _title?: string;
+  image: AvatarFragment;
+  role?: string;
+  company: CompanyFragment;
+};
+
+export type QuoteFragment = {
+  _id?: string | number;
+  quote?: string;
+  author: AuthorFragment;
+};
+
+export type TestimonialFragment = {
+  _id?: string | number;
+  _title?: string;
+  content?: string;
+  author?: AuthorFragment;
+  avatar?: AvatarFragment;
+};
+
+export type ButtonFragment = {
+  _id?: string | number;
+  label?: string;
+  href?: string;
+  type?: string;
+};
+
+export type HeadingFragment = {
+  title?: string;
+  subtitle?: string;
+  tag?: string;
+  align?: string;
+};
+
+export type OptimizedImageFragment = {
+  url?: string;
+  alt?: string;
+  width?: number;
+  height?: number;
+  blurDataURL?: string;
+  aspectRatio?: string;
+};
+
+export type DarkLightImageFragment = {
+  dark: OptimizedImageFragment;
+  light: OptimizedImageFragment;
 };

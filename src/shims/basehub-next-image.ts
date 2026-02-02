@@ -3,4 +3,6 @@
  * Fournit stub pour BaseHubImage
  */
 
-export { Image as BaseHubImage } from "next/image";
+import Image from "next/image";
+
+export { Image as BaseHubImage };

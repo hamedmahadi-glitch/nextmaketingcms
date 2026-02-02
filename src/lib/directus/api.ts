@@ -21,13 +21,13 @@ export async function getItems<T extends Record<string, any>>(
   }
 ) {
   try {
-    const query = readItems(collection as any, {
+    const query = readItems(collection as never, {
       fields: options?.fields || ["*"],
       limit: options?.limit || 100,
       offset: options?.offset || 0,
       sort: options?.sort,
       filter: options?.filter,
-    } as any);
+    } as never);
 
     const result = await (directus as any).request(query);
     return result as T[];
@@ -48,9 +48,9 @@ export async function getItem<T extends Record<string, any>>(
   }
 ) {
   try {
-    const query = readItem(collection as any, id, {
+    const query = readItem(collection as never, id, {
       fields: options?.fields || ["*"],
-    } as any);
+    } as never);
 
     const result = await (directus as any).request(query);
     return result as T;

@@ -194,7 +194,7 @@ function CustomAvatarHit({
   authors,
 }: {
   match: string | undefined;
-  authors: { _title: string; _id: string }[];
+  authors: { _title?: string; _id?: string | number }[];
 }) {
   const { authorsAvatars } = useSearchHits();
 
@@ -219,7 +219,8 @@ function CustomAvatarHit({
   return (
     <AvatarsGroup>
       {authors.map((author) => {
-        const avatar = authorsAvatars[author._id];
+        const id = author._id ? String(author._id) : undefined;
+        const avatar = id ? authorsAvatars[id] : undefined;
 
         if (!avatar) return null;
 

@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { getChangelogItems, getSiteSettings } from "@/lib/directus/api";
 import { Heading } from "@/common/heading";
 import { Section } from "@/common/layout";
-import { PageView } from "../../_components/page-view";
+import { PageView } from "../_components/page-view";
 
 export const dynamic = "force-dynamic";
 
@@ -23,7 +23,7 @@ export const generateMetadata = async (): Promise<Metadata | undefined> => {
 };
 
 export default async function ChangelogPage() {
-  let items = [];
+  let items: any[] = [];
 
   try {
     items = await getChangelogItems();

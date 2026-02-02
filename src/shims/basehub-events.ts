@@ -8,18 +8,28 @@ export function sendEvent(eventName: string, data?: any) {
   return Promise.resolve();
 }
 
-export function parseFormData(formData: FormData) {
-  const data: Record<string, any> = {};
-  formData.forEach((value, key) => {
-    if (data[key]) {
-      if (Array.isArray(data[key])) {
-        data[key].push(value);
+export function parseFormData(
+  key: string | FormData,
+  schema?: Record<string, any>,
+  data?: any
+) {
+  let result: Record<string, any> = {};
+  
+  if (key instanceof FormData) {
+    key.forEach((value, formKey) => {
+      if (result[formKey]) {
+        if (Array.isArray(result[formKey])) {
+          result[formKey].push(value);
+        } else {
+          result[formKey] = [result[formKey], value];
+        }
       } else {
-        data[key] = [data[key], value];
+        result[formKey] = value;
       }
-    } else {
-      data[key] = value;
-    }
-  });
-  return data;
+    });
+  } else if (data) {
+    result = data;
+  }
+  
+  return { success: true, data: result, errors: {} };
 }

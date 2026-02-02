@@ -7,6 +7,7 @@
 
 import { useEffect, useState } from 'react';
 import { Button } from '@/common/button';
+import { ButtonLink } from '@/common/button';
 import { Heading } from '@/common/heading';
 
 interface HeroProps {
@@ -65,12 +66,12 @@ export function HeroFromDirectus({ hero }: { hero: HeroProps }) {
         {/* CTA Button */}
         {hero.cta_text && (
           <div className="mt-4">
-            <Button
+            <ButtonLink
               href={hero.cta_link || '#'}
               size="lg"
             >
               {hero.cta_text}
-            </Button>
+            </ButtonLink>
           </div>
         )}
 

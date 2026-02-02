@@ -30,8 +30,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   });
 
   let index = 1;
-  const formattedPages = data.site.pages.items.map(
-    (page) =>
+  const pages = (data as any)?.site?.pages?.items ?? [];
+  const blogPosts = (data as any)?.site?.blog?.posts?.items ?? [];
+  const changelogPosts = (data as any)?.site?.changelog?.posts?.items ?? [];
+
+  const formattedPages = pages.map(
+    (page: any) =>
       ({
         url: `${siteUrl}${page.pathname}`,
         lastModified: new Date(),
@@ -40,8 +44,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }) satisfies MetadataRoute.Sitemap[number],
   );
 
-  const formattedBlogPosts = data.site.blog.posts.items.map(
-    (post) =>
+  const formattedBlogPosts = blogPosts.map(
+    (post: any) =>
       ({
         url: `${siteUrl}/blog/${post._slug}`,
         lastModified: new Date(),
@@ -50,8 +54,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }) satisfies MetadataRoute.Sitemap[number],
   );
 
-  const formattedChangelogPosts = data.site.changelog.posts.items.map(
-    (post) =>
+  const formattedChangelogPosts = changelogPosts.map(
+    (post: any) =>
       ({
         url: `${siteUrl}/changelog/${post._slug}`,
         lastModified: new Date(),

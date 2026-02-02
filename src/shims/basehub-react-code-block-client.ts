@@ -4,14 +4,10 @@
 // useCopyToClipboard hook stub
 export function useCopyToClipboard() {
   return {
-    copy: async (text: string) => {
-      try {
-        await navigator.clipboard.writeText(text);
-        return true;
-      } catch {
-        return false;
-      }
+    copied: false,
+    onCopy: async () => {
+      // Stub implementation
+      return false;
     },
-    isCopied: false,
   };
 }

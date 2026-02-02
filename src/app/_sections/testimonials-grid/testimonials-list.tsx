@@ -56,9 +56,9 @@ export function TestimonialsGridClient({ quotes }: { quotes: QuoteFragment[] }) 
               <div className="pl-4">
                 <figure className="aspect-square size-8 rounded-full">
                   <BaseHubImage
-                    alt={author.image.alt ?? author._title}
+                    alt={author.image.alt ?? author._title ?? "author"}
                     className="size-8 rounded-full"
-                    src={author.image.url}
+                    src={author.image.url ?? ""}
                     width={32}
                     height={32}
                   />
