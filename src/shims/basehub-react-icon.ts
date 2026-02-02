@@ -1,5 +1,6 @@
+"use client";
 // Stub for basehub/react-icon - Icon component compatibility shim
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 
 export interface IconProps {
   name?: string;

@@ -25,8 +25,6 @@ export async function FormLayout({
   return (
     <div className="mx-auto flex w-full max-w-xl flex-col gap-5 rounded-xl border border-surface-secondary bg-surface-primary p-5 shadow-md dark:border-dark-border dark:bg-dark-surface-secondary dark:shadow-none">
       <header className="flex flex-col gap-3">
-          queries={[
-            {
         <Image
           priority
           alt="Logo"

@@ -1,3 +1,4 @@
+"use client";
 // Stub for basehub/react-search - Search functionality compatibility shim
 import { ReactNode } from "react";
 

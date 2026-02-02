@@ -53,6 +53,15 @@
       ],
       "basehub/react-icon": [
         "./src/shims/basehub-react-icon.ts"
+      ],
+      "basehub/next-toolbar": [
+        "./src/shims/basehub-next-toolbar.ts"
+      ],
+      "basehub/react-code-block": [
+        "./src/shims/basehub-react-code-block.ts"
+      ],
+      "basehub/react-code-block/client": [
+        "./src/shims/basehub-react-code-block-client.ts"
       ]
     }
   },
