@@ -1,225 +1,149 @@
 import type { Metadata } from "next";
-
-import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
 
-import { Pump } from "basehub/react-pump";
-import { GeneralEvents } from "@/../basehub-types";
-//import { basehub, fragmentOn } from "basehub";
+import { getPageBySlug, getPages, getSiteSettings } from "@/lib/directus/api";
 
+// Imports des sections (conservés de l'original)
 import { AccordionFaq } from "../_sections/accordion-faq";
-import { BigFeature, bigFeatureFragment } from "../_sections/features/big-feature";
-import { Callout, calloutFragment } from "../_sections/callout-1";
-import { Callout2, calloutv2Fragment } from "../_sections/callout-2";
-import { Companies, companiesFragment } from "../_sections/companies";
-import { Faq, faqFragment } from "../_sections/faq";
-import { FeaturesGrid, featuresGridFragment } from "../_sections/features/features-grid";
-import { FeaturesList, featureCardsComponent } from "../_sections/features/features-list";
-import { Hero, heroFragment } from "../_sections/hero";
-import { Pricing, pricingFragment } from "../_sections/pricing";
-import { SideFeatures, featuresSideBySideFragment } from "../_sections/features/side-features";
-import { Testimonials, testimonialsSliderFragment } from "../_sections/testimonials";
-import { TestimonialsGrid, testimonialsGridFragment } from "../_sections/testimonials-grid";
+import { BigFeature } from "../_sections/features/big-feature";
+import { Callout } from "../_sections/callout-1";
+import { Callout2 } from "../_sections/callout-2";
+import { Companies } from "../_sections/companies";
+import { Faq } from "../_sections/faq";
+import { FeaturesGrid } from "../_sections/features/features-grid";
+import { FeaturesList } from "../_sections/features/features-list";
+import { Hero } from "../_sections/hero";
+import { Pricing } from "../_sections/pricing";
+import { SideFeatures } from "../_sections/features/side-features";
+import { Testimonials } from "../_sections/testimonials";
+import { TestimonialsGrid } from "../_sections/testimonials-grid";
 import { PricingTable } from "../_sections/pricing-comparation";
-import { pricingTableFragment } from "../_sections/pricing-comparation/fragments";
-import FeatureHero, { featureHeroFragment } from "../_sections/features/hero";
+import FeatureHero from "../_sections/features/hero";
 import { PageView } from "../_components/page-view";
-import { FreeformText, freeformTextFragment } from "../_sections/freeform-text";
-import { Form, formFragment } from "../_sections/form";
+import { FreeformText } from "../_sections/freeform-text";
+import { Form } from "../_sections/form";
 
-export const dynamic = "force-static";
+export const dynamic = "force-dynamic";
 
 export const generateStaticParams = async () => {
-  const data = await basehub().query({
-    site: {
-      pages: {
-        items: {
-          pathname: true,
-        },
-      },
-    },
-  });
-
-  return data.site.pages.items.map((item) => ({
-    slug: item.pathname.split("/").filter(Boolean),
-  }));
+  try {
+    const pages = await getPages();
+    return pages.map((page: any) => ({
+      slug: (page.slug || "").split("/").filter(Boolean),
+    }));
+  } catch (error) {
+    console.error("Error generating static params:", error);
+    return [];
+  }
 };
 
 export const generateMetadata = async ({
-  params: _params,
+  params,
 }: {
   params: Promise<{ slug?: string[] }>;
 }): Promise<Metadata | undefined> => {
-  const params = await _params;
-  const data = await basehub({ draft: (await draftMode()).isEnabled }).query({
-    site: {
-      settings: { metadata: { defaultTitle: true, titleTemplate: true, defaultDescription: true } },
-      pages: {
-        __args: {
-          filter: {
-            pathname: {
-              eq: params.slug ? `/${params.slug.join("/")}` : "/",
-            },
-          },
-        },
-        items: {
-          metadataOverrides: {
-            title: true,
-            description: true,
-          },
-        },
-      },
-    },
-  });
+  const { slug } = await params;
+  const pathname = slug ? `/${slug.join("/")}` : "/";
 
-  const page = data.site.pages.items.at(0);
+  try {
+    const page = await getPageBySlug(pathname);
+    const settings = await getSiteSettings();
 
-  if (!page) {
-    return notFound();
+    if (!page) {
+      return notFound();
+    }
+
+    return {
+      title: page.meta_title || page.title || (settings?.site_name || ""),
+      description: page.meta_description || page.description || "",
+    };
+  } catch (error) {
+    console.error("Error generating metadata:", error);
+    return {};
   }
-
-  return {
-    title: page.metadataOverrides.title ?? data.site.settings.metadata.defaultTitle,
-    description:
-      page.metadataOverrides.description ?? data.site.settings.metadata.defaultDescription,
-  };
 };
 
-function SectionsUnion({
-  comp,
-  eventsKey,
-}: {
-  comp: NonNullable<fragmentOn.infer<typeof sectionsFragment>["sections"]>[number];
-  eventsKey: GeneralEvents["ingestKey"];
-}): React.ReactNode {
-  switch (comp.__typename) {
-    case "HeroComponent":
-      return <Hero {...comp} key={comp._id} eventsKey={eventsKey} />;
-    case "FeaturesCardsComponent":
-      return <FeaturesList {...comp} key={comp._id} />;
-    case "FeaturesGridComponent":
-      return <FeaturesGrid {...comp} key={comp._id} eventsKey={eventsKey} />;
-    case "CompaniesComponent":
-      return <Companies {...comp} key={comp._id} />;
-    case "FeaturesBigImageComponent":
-      return <BigFeature {...comp} key={comp._id} />;
-    case "FeaturesSideBySideComponent":
-      return <SideFeatures {...comp} key={comp._id} eventsKey={eventsKey} />;
-    case "CalloutComponent":
-      return <Callout {...comp} key={comp._id} eventsKey={eventsKey} />;
-    case "CalloutV2Component":
-      return <Callout2 {...comp} key={comp._id} eventsKey={eventsKey} />;
-    case "TestimonialSliderComponent":
-      return <Testimonials {...comp} key={comp._id} />;
-    case "TestimonialsGridComponent":
-      return <TestimonialsGrid {...comp} key={comp._id} />;
-    case "PricingComponent":
-      return <Pricing {...comp} key={comp._id} />;
-    case "FaqComponent":
-      return <Faq {...comp} key={comp._id} />;
-    case "FaqComponent":
-      return <AccordionFaq {...comp} key={comp._id} eventsKey={eventsKey} />;
-    case "PricingTableComponent":
-      return <PricingTable {...comp} key={comp._id} />;
-    case "FeatureHeroComponent":
-      return <FeatureHero {...comp} key={comp._id} eventsKey={eventsKey} />;
-    case "FreeformTextComponent":
-      return <FreeformText {...comp} key={comp._id} />;
-    case "FormComponent":
-      return <Form {...comp} key={comp._id} />;
+/**
+ * Rend dynamiquement une section basée sur son type
+ */
+function SectionRenderer({ section, eventsKey }: { section: any; eventsKey?: string }) {
+  if (!section) return null;
+
+  const componentType = section.component?.type || section.type;
+
+  switch (componentType) {
+    case "hero":
+      return <Hero {...section} key={section.id} eventsKey={eventsKey} />;
+    case "features_cards":
+      return <FeaturesList {...section} key={section.id} />;
+    case "features_grid":
+      return <FeaturesGrid {...section} key={section.id} eventsKey={eventsKey} />;
+    case "companies":
+      return <Companies {...section} key={section.id} />;
+    case "big_feature":
+      return <BigFeature {...section} key={section.id} />;
+    case "side_features":
+      return <SideFeatures {...section} key={section.id} eventsKey={eventsKey} />;
+    case "callout":
+      return <Callout {...section} key={section.id} eventsKey={eventsKey} />;
+    case "callout_v2":
+      return <Callout2 {...section} key={section.id} eventsKey={eventsKey} />;
+    case "testimonials_slider":
+      return <Testimonials {...section} key={section.id} />;
+    case "testimonials_grid":
+      return <TestimonialsGrid {...section} key={section.id} />;
+    case "pricing":
+      return <Pricing {...section} key={section.id} />;
+    case "faq":
+      return <Faq {...section} key={section.id} />;
+    case "accordion_faq":
+      return <AccordionFaq {...section} key={section.id} eventsKey={eventsKey} />;
+    case "pricing_table":
+      return <PricingTable {...section} key={section.id} />;
+    case "feature_hero":
+      return <FeatureHero {...section} key={section.id} eventsKey={eventsKey} />;
+    case "freeform_text":
+      return <FreeformText {...section} key={section.id} />;
+    case "form":
+      return <Form {...section} key={section.id} />;
     default:
+      console.warn(`Unknown section type: ${componentType}`);
       return null;
   }
 }
 
-const sectionsFragment = fragmentOn("PagesItem", {
-  sections: {
-    __typename: true,
-    on_BlockDocument: { _id: true, _slug: true },
-    on_HeroComponent: heroFragment,
-    on_FeaturesCardsComponent: featureCardsComponent,
-    on_FeaturesSideBySideComponent: featuresSideBySideFragment,
-    on_FeaturesBigImageComponent: bigFeatureFragment,
-    on_FeaturesGridComponent: featuresGridFragment,
-    on_CompaniesComponent: companiesFragment,
-    on_CalloutComponent: calloutFragment,
-    on_CalloutV2Component: calloutv2Fragment,
-    on_TestimonialSliderComponent: testimonialsSliderFragment,
-    on_TestimonialsGridComponent: testimonialsGridFragment,
-    on_PricingComponent: pricingFragment,
-    on_PricingTableComponent: pricingTableFragment,
-    on_FeatureHeroComponent: featureHeroFragment,
-    on_FaqComponent: {
-      layout: true,
-      ...faqFragment,
-    },
-    on_FreeformTextComponent: freeformTextFragment,
-    on_FormComponent: formFragment,
-  },
-});
-
 export default async function DynamicPage({
-  params: _params,
+  params,
 }: {
   params: Promise<{ slug?: string[] }>;
 }) {
-  const params = await _params;
-  const slugs = params.slug;
+  const { slug } = await params;
+  const pathname = slug ? `/${slug.join("/")}` : "/";
 
-  return (
-    <Pump
-      queries={[
-        {
-          site: {
-            pages: {
-              __args: {
-                filter: {
-                  pathname: {
-                    eq: slugs ? `/${slugs.join("/")}` : "/",
-                  },
-                },
-                first: 1,
-              },
-              items: {
-                _analyticsKey: true,
-                _id: true,
-                pathname: true,
-                sections: sectionsFragment.sections,
-              },
-            },
-            generalEvents: {
-              ingestKey: true,
-            },
-          },
-        },
-      ]}
-    >
-      {async ([
-        {
-          site: { pages, generalEvents },
-        },
-      ]) => {
-        "use server";
+  try {
+    const page = await getPageBySlug(pathname);
 
-        const page = pages.items[0];
+    if (!page) {
+      notFound();
+    }
 
-        if (!page) notFound();
+    const sections = Array.isArray(page.sections) ? page.sections : [];
 
-        const sections = page.sections;
+    // Mock eventsKey pour l'analytics - à adapter selon votre système
+    const eventsKey = "default_ingest_key";
 
-        return (
-          <>
-            <PageView ingestKey={generalEvents.ingestKey} />
-            {sections?.map((section) => {
-              return (
-                <div key={section._id} id={section._slug}>
-                  <SectionsUnion comp={section} eventsKey={generalEvents.ingestKey} />
-                </div>
-              );
-            })}
-          </>
-        );
-      }}
-    </Pump>
-  );
+    return (
+      <>
+        <PageView ingestKey={eventsKey} />
+        {sections.map((section: any) => (
+          <div key={section.id} id={section.slug || section.id}>
+            <SectionRenderer section={section} eventsKey={eventsKey} />
+          </div>
+        ))}
+      </>
+    );
+  } catch (error) {
+    console.error("Error loading page:", error);
+    notFound();
+  }
 }
