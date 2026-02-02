@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 
 import { Pump } from "basehub/react-pump";
 import { GeneralEvents } from "@/../basehub-types";
-import { basehub, fragmentOn } from "basehub";
+//import { basehub, fragmentOn } from "basehub";
 
 import { AccordionFaq } from "../_sections/accordion-faq";
 import { BigFeature, bigFeatureFragment } from "../_sections/features/big-feature";
