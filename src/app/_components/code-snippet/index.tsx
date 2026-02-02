@@ -1,3 +1,5 @@
+"use client";
+
 import { CodeBlock, type Language, createCssVariablesTheme } from "basehub/react-code-block";
 
 import { fragmentOn } from "basehub";
@@ -30,6 +32,8 @@ export type CodeSnippetFragment = {
 };
 
 export function CodeSnippet({ code, _id, _title = "Untitled" }: CodeSnippetFragment) {
+  const language = (code.language || "text") as Language;
+
   return (
     <div className={s["code-snippet"]}>
       <CodeBlock
@@ -37,7 +41,7 @@ export function CodeSnippet({ code, _id, _title = "Untitled" }: CodeSnippetFragm
           <header className={s.header}>
             <div className="flex items-center">
               <span className="mr-2 size-4">
-                {languagesIcons[code.language as Language] ?? <FileIcon />}
+                {languagesIcons[language] ?? <FileIcon />}
               </span>
               <span className="text-text-secondary dark:text-dark-text-secondary">{_title}</span>
             </div>
@@ -52,7 +56,7 @@ export function CodeSnippet({ code, _id, _title = "Untitled" }: CodeSnippetFragm
           ),
         }}
         lineNumbers={{ className: "line-indicator" }}
-        snippets={[{ code: code.code, language: code.language as Language, id: _id }]}
+        snippets={[{ code: code.code, language: language, id: _id }]}
         theme={theme}
       />
     </div>

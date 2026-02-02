@@ -1,11 +1,5 @@
 import { readItems, readItem } from "@directus/sdk";
-import { directus, getDirectusUrl, getDirectusToken } from "./config";
-
-const token = getDirectusToken();
-
-if (token) {
-  (directus as any).setToken(token);
-}
+import { directus } from "./config";
 
 /**
  * Récupère tous les items d'une collection

@@ -85,13 +85,15 @@ export const generateMetadata = async (): Promise<Metadata> => {
     },
     applicationName: meta.sitename,
     description: meta.defaultDescription,
-    icons: [
-      {
-        url: meta.favicon?.url,
-        rel: "icon",
-        type: meta.favicon?.mimeType,
-      },
-    ],
+    icons: meta.favicon?.url
+      ? [
+          {
+            url: meta.favicon.url,
+            rel: "icon",
+            type: meta.favicon.mimeType,
+          },
+        ]
+      : [],
     openGraph: { type: "website", images, siteName: meta.sitename },
     twitter: {
       card: "summary_large_image",
