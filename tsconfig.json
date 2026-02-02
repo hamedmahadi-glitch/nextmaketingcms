@@ -28,10 +28,19 @@
         "./src/*"
       ],
       "basehub": [
-        "./src/shims/basehub.ts"
+        "./src/shims/basehub-main.ts"
       ],
-      "basehub/*": [
-        "./src/shims/basehub.ts"
+      "basehub/events": [
+        "./src/shims/basehub-events.ts"
+      ],
+      "basehub/react-pump": [
+        "./src/shims/basehub-react-pump.ts"
+      ],
+      "basehub/react-rich-text": [
+        "./src/shims/basehub-react-rich-text.ts"
+      ],
+      "basehub/next-image": [
+        "./src/shims/basehub-next-image.ts"
       ],
       "@/../basehub-types": [
         "./src/shims/basehub-types.ts"
