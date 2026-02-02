@@ -15,14 +15,21 @@ export async function getItems<T extends Record<string, any>>(
   }
 ) {
   try {
-    const query = readItems(collection as never, {
+    const queryParams: any = {
       fields: options?.fields || ["*"],
       limit: options?.limit || 100,
       offset: options?.offset || 0,
-      sort: options?.sort,
-      filter: options?.filter,
-    } as never);
+    };
 
+    if (options?.sort) {
+      queryParams.sort = options.sort;
+    }
+
+    if (options?.filter) {
+      queryParams.filter = options.filter;
+    }
+
+    const query = readItems(collection as never, queryParams as never);
     const result = await (directus as any).request(query);
     return result as T[];
   } catch (error) {
