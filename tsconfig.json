@@ -50,6 +50,9 @@
       ],
       "basehub/react-search": [
         "./src/shims/basehub-react-search.ts"
+      ],
+      "basehub/react-icon": [
+        "./src/shims/basehub-react-icon.ts"
       ]
     }
   },
