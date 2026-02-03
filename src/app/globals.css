@@ -44,9 +44,17 @@
   outline-color: var(--accent-300);
 }
 
-:root {
+html.dark {
   color: var(--dark-text-primary);
   background-color: var(--dark-surface-primary);
+}
+
+html.dark ::selection {
+  background-color: var(--dark-accent-200);
+}
+
+html.dark *:focus-visible {
+  outline-color: var(--dark-accent-300);
 }
 
 :root ::selection {
