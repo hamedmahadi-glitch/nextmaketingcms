@@ -1,125 +1,33 @@
-import type { Metadata, Viewport } from "next";
+import { Header } from "@/components/Header";
+import { Pump } from "basehub/react-pump";
 
-import "./globals.css";
-import { Geist, Geist_Mono } from "next/font/google";
-import { basehub } from "basehub";
+// mock logos si besoin
+const defaultSettings = {
+  logo: {
+    dark: { url: "/logo-dark.png", alt: "Logo Dark", width: 100, height: 40, aspectRatio: 2.5, blurDataURL: "" },
+    light: { url: "/logo-light.png", alt: "Logo Light", width: 100, height: 40, aspectRatio: 2.5, blurDataURL: "" },
+  },
+};
 
-import { Providers } from "./providers";
-import { Header } from "./_components/header";
-import { Footer } from "./_components/footer";
-import { Newsletter } from "./_sections/newsletter";
-import { draftMode } from "next/headers";
-
-const geist = Geist({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-sans",
-  fallback: [
-    "Inter",
-    "-apple-system",
-    "BlinkMacSystemFont",
-    "Segoe UI",
-    "Roboto",
-    "Oxygen",
-    "Ubuntu",
-    "Cantarell",
-    "Fira Sans",
-    "Droid Sans",
-    "Helvetica Neue",
-    "sans-serif",
-  ],
-});
-
-const geistMono = Geist_Mono({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-mono",
-  fallback: ["monaco", "monospace"],
-});
-
-export const generateMetadata = async (): Promise<Metadata> => {
-  const data = await basehub({ cache: "no-store", draft: (await draftMode()).isEnabled }).query({
-    site: {
-      settings: {
-        metadata: {
-          sitename: true,
-          titleTemplate: true,
-          defaultTitle: true,
-          defaultDescription: true,
-          favicon: {
-            url: true,
-            mimeType: true,
-          },
-          ogImage: {
-            url: true,
-          },
-          xAccount: {
-            url: true,
-          },
-        },
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  // fetch Directus
+  const [data] = await Pump([
+    {
+      site: {
+        header: {}, // headerFragment ou tes queries
+        settings: defaultSettings,
       },
     },
-  });
+  ]);
 
-  const meta = (data as any)?.site?.settings?.metadata ?? {};
+  const headerData = data?.site?.header ?? undefined;
+  const settings = data?.site?.settings ?? defaultSettings;
 
-  const images = [{ url: meta.ogImage?.url ?? "" }];
-
-  let xAccount: string | undefined = undefined;
-
-  if (meta.xAccount?.url) {
-    try {
-      const xUrl = new URL(meta.xAccount.url);
-      const split = xUrl.pathname.split("/");
-
-      xAccount = split[split.length - 1];
-    } catch {
-      // invalid url noop
-    }
-  }
-
-  return {
-    title: {
-      default: meta.defaultTitle,
-      template: meta.titleTemplate,
-    },
-    applicationName: meta.sitename,
-    description: meta.defaultDescription,
-    icons: meta.favicon?.url
-      ? [
-          {
-            url: meta.favicon.url,
-            rel: "icon",
-            type: meta.favicon.mimeType,
-          },
-        ]
-      : [],
-    openGraph: { type: "website", images, siteName: meta.sitename },
-    twitter: {
-      card: "summary_large_image",
-      images,
-      site: meta.sitename,
-      creator: xAccount,
-    },
-  };
-};
-
-export const viewport: Viewport = {
-  maximumScale: 1, // Disable auto-zoom on mobile Safari
-};
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html suppressHydrationWarning lang="en">
-      <body
-        className={`min-h-svh max-w-[100vw] bg-surface-primary text-text-primary dark:bg-dark-surface-primary dark:text-dark-text-primary ${geistMono.variable} ${geist.variable} font-sans`}
-      >
-        <Providers>
-          <Header />
-          <main className="min-h-[calc(100svh-var(--header-height))]">{children}</main>
-          <Newsletter />
-          <Footer />
-        </Providers>
+    <html lang="fr">
+      <body>
+        <Header headerData={headerData} settings={settings} />
+        <main className="min-h-[calc(100svh-80px)]">{children}</main>
       </body>
     </html>
   );
