@@ -1,0 +1,18 @@
+[
+  {
+    "id": "home",
+    "slug": "/",
+    "title": "Welcome to Mock Site",
+    "meta_title": "Mock Home",
+    "meta_description": "This is a mocked home page while Directus is disabled.",
+    "sections": [
+      {
+        "id": "hero-1",
+        "slug": "hero-1",
+        "component": { "type": "hero" },
+        "title": "Mock Hero",
+        "subtitle": "Mocked content is displayed because Directus is disabled."
+      }
+    ]
+  }
+]

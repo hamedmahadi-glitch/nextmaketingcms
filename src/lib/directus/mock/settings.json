@@ -1,0 +1,7 @@
+{
+  "site_name": "Mock Site",
+  "favicon": {
+    "url": "/favicon.ico"
+  },
+  "description": "This is mock site settings provided when Directus is disabled."
+}

@@ -1,5 +1,7 @@
 import { readItems, readItem } from "@directus/sdk";
 import { directus } from "./config";
+import fs from "fs/promises";
+import path from "path";
 
 // Keep a short-lived in-memory set of endpoints that already failed
 // to avoid spamming the logs with repeated identical auth errors.
@@ -18,6 +20,20 @@ export async function getItems<T extends Record<string, any>>(
     offset?: number;
   }
 ) {
+  // If Directus is disabled, return mock data from disk (if any).
+  if (process.env.DISABLE_DIRECTUS === "1") {
+    try {
+      const mockPath = path.resolve(process.cwd(), `src/lib/directus/mock/${collection}.json`);
+      const txt = await fs.readFile(mockPath, "utf8");
+      const parsed = JSON.parse(txt) as T[];
+      // If sort/limit/offset are provided, do a minimal emulation
+      const limit = typeof options?.limit === "number" ? options.limit : parsed.length;
+      const offset = typeof options?.offset === "number" ? options.offset : 0;
+      return parsed.slice(offset, offset + limit);
+    } catch (err) {
+      // No mock file; fall through to attempt real Directus call (which may fail)
+    }
+  }
   try {
     const queryParams: any = {};
     
@@ -127,8 +143,17 @@ export async function getPageBySlug(slug: string) {
   }
 
   // Allow disabling Directus remote calls during local builds or when token is unavailable
+  // If disabled, fall back to the local mock files in `src/lib/directus/mock/`
   if (process.env.DISABLE_DIRECTUS === "1") {
-    return null;
+    try {
+      const mockPath = path.resolve(process.cwd(), "src/lib/directus/mock/pages.json");
+      const txt = await fs.readFile(mockPath, "utf8");
+      const all = JSON.parse(txt) as any[];
+      return all.find((p) => p.slug === slug) || null;
+    } catch (err) {
+      console.warn("DISABLE_DIRECTUS enabled but mock pages not found, returning null.", err);
+      return null;
+    }
   }
 
   try {
