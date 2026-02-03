@@ -109,16 +109,34 @@ export async function getPages() {
  * Récupère une page spécifique par slug
  */
 export async function getPageBySlug(slug: string) {
-  const pages = await getItems("pages", {
-    fields: ["*", "sections.*", "sections.component.*"],
-    filter: {
-      slug: {
-        _eq: slug,
-      },
-    },
-  });
+  // Guard: avoid querying Directus for asset-like paths (favicon, files)
+  // These are often requested by the browser and should not trigger CMS queries.
+  if (!slug) return null;
+  const lower = slug.toLowerCase();
+  if (lower.includes(".") || lower.startsWith("/favicon") || lower.startsWith("/robots") || lower.startsWith("/sitemap")) {
+    return null;
+  }
 
-  return pages[0] || null;
+  // Allow disabling Directus remote calls during local builds or when token is unavailable
+  if (process.env.DISABLE_DIRECTUS === "1") {
+    return null;
+  }
+
+  try {
+    const pages = await getItems("pages", {
+      fields: ["*", "sections.*", "sections.component.*"],
+      filter: {
+        slug: {
+          _eq: slug,
+        },
+      },
+    });
+
+    return pages[0] || null;
+  } catch (err: any) {
+    console.warn(`getPageBySlug: failed to fetch page for ${slug}: ${err?.message || err}`);
+    return null;
+  }
 }
 
 /**
