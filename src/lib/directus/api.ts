@@ -229,6 +229,19 @@ export async function getChangelogItemBySlug(slug: string) {
  * Récupère les paramètres du site
  */
 export async function getSiteSettings() {
+  // When Directus is disabled, return the mock settings object directly
+  if (process.env.DISABLE_DIRECTUS === "1") {
+    try {
+      const mockPath = path.resolve(process.cwd(), "src/lib/directus/mock/settings.json");
+      const txt = await fs.readFile(mockPath, "utf8");
+      const obj = JSON.parse(txt);
+      return obj || null;
+    } catch (err) {
+      console.warn("DISABLE_DIRECTUS is set but mock settings not found in getSiteSettings:", err);
+      return null;
+    }
+  }
+
   try {
     const settings = await getItems("settings", {
       fields: ["*"],
