@@ -11,6 +11,7 @@ export async function GET() {
         const mockPath = path.resolve(process.cwd(), "src/lib/directus/mock/settings.json");
         const txt = await fs.readFile(mockPath, "utf8");
         const obj = JSON.parse(txt);
+        console.log("Serving mock settings from", mockPath);
         return NextResponse.json(obj || {});
       } catch (err) {
         console.warn("DISABLE_DIRECTUS is set but mock settings not found:", err);
