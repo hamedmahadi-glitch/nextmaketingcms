@@ -1,6 +1,10 @@
 import { readItems, readItem } from "@directus/sdk";
 import { directus } from "./config";
 
+// Keep a short-lived in-memory set of endpoints that already failed
+// to avoid spamming the logs with repeated identical auth errors.
+const _failedEndpoints = new Set<string>();
+
 /**
  * Récupère tous les items d'une collection
  */
@@ -51,13 +55,18 @@ export async function getItems<T extends Record<string, any>>(
     const errorMessage = error?.message || JSON.stringify(error);
     const errorDetails = error?.errors?.[0]?.message || error?.statusText || 'Unknown error';
     const status = error?.status || error?.response?.status;
-    
-    console.warn(`Failed to fetch items from ${collection}: ${errorDetails} (${status}). Returning empty array.`, {
-      message: errorMessage,
-      status,
-      url: error?.url || error?.response?.url,
-    });
-    
+    const url = error?.url || error?.response?.url || collection;
+
+    // Log only once per failing endpoint to reduce repeated noisy logs
+    if (!_failedEndpoints.has(url)) {
+      console.warn(`Failed to fetch items from ${collection}: ${errorDetails} (${status}). Returning empty array.`, {
+        message: errorMessage,
+        status,
+        url,
+      });
+      _failedEndpoints.add(url);
+    }
+
     // Return empty array as fallback instead of throwing
     return [] as T[];
   }
